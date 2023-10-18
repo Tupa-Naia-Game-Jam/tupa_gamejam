@@ -1,8 +1,10 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements.Experimental;
 
 public class Player : MonoBehaviour
 {
@@ -11,20 +13,29 @@ public class Player : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float powerUp = 3f;
     [SerializeField] private float chargeRate;
-    [SerializeField] private GameObject visual;
-    
+    [SerializeField] private GameObject playerVisual;
+    [SerializeField] private GameObject trailVFX;
+
+    [Space(5)]
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Rigidbody rb;
 
-    [SerializeField] private float _stamina;
+    [Space(5)]
+    [SerializeField] private GameObject holeTUT;
+
+    private float _stamina;
     private bool _isWalking;
     private bool _isJumping;
-    [SerializeField] private bool _isDashing;
+    private bool _isDashing;
+    private bool _isDigging;
+
     private Coroutine _rechargeCoroutine;
 
     private void Start()
     {
         _stamina = maxStamina;
+        holeTUT.SetActive(false);
+        trailVFX.SetActive(false);
 
     }
     private void Update()
@@ -37,19 +48,22 @@ public class Player : MonoBehaviour
         _isWalking = moverDir != Vector3.zero;
         _isJumping = gameInput.GetJump();
         _isDashing = gameInput.GetDash();
+        _isDigging = gameInput.GetDig();
 
         float rotateSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moverDir, Time.deltaTime * rotateSpeed);
 
         if (_isJumping ) IsJumping();
         if (_isDashing && _stamina > 0) IsDashing(moverDir);
-        if(!_isDashing) visual.transform.localScale = new Vector3(1, 1, 1);
+        if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
+
+        Digging();
+
     }
 
-    public bool IsWalking()
-    {
-        return _isWalking;
-    }
+    
+
+
 
     public void IsJumping()
     {
@@ -68,7 +82,7 @@ public class Player : MonoBehaviour
     {
         rb.velocity = moverDir * moveSpeed * 1.5f;
         
-        visual.transform.localScale = new Vector3(1, 0.5f, 1);
+        //playerVisual.transform.localScale = new Vector3(1, 0.5f, 1);
 
         _stamina -= 10 * Time.deltaTime;
         if(_stamina < 0) _stamina = 0;
@@ -78,7 +92,42 @@ public class Player : MonoBehaviour
         _rechargeCoroutine = StartCoroutine(RechargerStamina());
     }
 
-   
+    private void Digging()
+    {
+        if (_isDigging)
+        {
+            Debug.Log("cavando");
+            //holeTUT.SetActive(true);
+            //trailVFX.SetActive(true);
+            //playerVisual.transform.DOMoveY(-10f, 1);
+            
+            //holeTUT.transform.DOScale(1, 1);
+
+            // -- animação de cavando
+            // -- quando a animação terminar
+            //visual.SetActive(false)
+
+            // -- efeito de terra
+
+        }
+        else
+        {
+            //playerVisual.transform.DOMoveY(1f, 1);
+            playerVisual.SetActive(true);
+            holeTUT.SetActive(false);
+        }
+    }
+
+    public bool IsWalking()
+    {
+
+        return _isWalking;
+    }
+
+    public bool IsDigging()
+    {
+        return _isDigging;
+    }
 
     private IEnumerator RechargerStamina()
     {

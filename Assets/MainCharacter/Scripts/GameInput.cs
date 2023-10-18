@@ -38,7 +38,8 @@ public class GameInput : MonoBehaviour
 
     public bool GetDig()
     {
-        if(_playerInputActions.Player.Dig.IsPressed())
+        Debug.Log(_playerInputActions.Player.Dig.WasPressedThisFrame());
+        if(_playerInputActions.Player.Dig.WasPressedThisFrame())
         {
             return true;
         }
