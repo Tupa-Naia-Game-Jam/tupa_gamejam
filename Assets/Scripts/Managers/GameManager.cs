@@ -36,11 +36,13 @@ public class GameManager : MonoBehaviour {
     #region State Actions
     public void Pause() {
         _state = GameState.PAUSED;
+        onPause();
         Time.timeScale = 0f;
     }
 
     public void Resume() {
         _state = GameState.IN_GAME;
+        onResume();
         Time.timeScale = 1f;
     }
 
