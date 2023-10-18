@@ -46,9 +46,9 @@ public class Player : MonoBehaviour
         if(!_isDashing) visual.transform.localScale = new Vector3(1, 1, 1);
     }
 
-    public void IsWalking()
+    public bool IsWalking()
     {
-
+        return _isWalking;
     }
 
     public void IsJumping()

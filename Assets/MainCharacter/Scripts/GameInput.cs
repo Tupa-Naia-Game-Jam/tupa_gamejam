@@ -25,6 +25,7 @@ public class GameInput : MonoBehaviour
         return _playerInputActions.Player.Jump.WasPressedThisFrame();
     }
 
+
     public bool GetDash()
     {
         if(_playerInputActions.Player.Dash.IsPressed())
@@ -32,6 +33,15 @@ public class GameInput : MonoBehaviour
             return true;
         }
         
+        return false;
+    }
+
+    public bool GetDig()
+    {
+        if(_playerInputActions.Player.Dig.IsPressed())
+        {
+            return true;
+        }
         return false;
     }
 }
