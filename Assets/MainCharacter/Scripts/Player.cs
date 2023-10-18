@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         if (_isDashing && _stamina > 0) IsDashing(moverDir);
         if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
 
-        Digging();
+        //PlayerDigging();
 
     }
 
@@ -92,30 +92,11 @@ public class Player : MonoBehaviour
         _rechargeCoroutine = StartCoroutine(RechargerStamina());
     }
 
-    private void Digging()
+   
+
+    public void PlayerDigging()
     {
-        if (_isDigging)
-        {
-            Debug.Log("cavando");
-            //holeTUT.SetActive(true);
-            //trailVFX.SetActive(true);
-            //playerVisual.transform.DOMoveY(-10f, 1);
-            
-            //holeTUT.transform.DOScale(1, 1);
-
-            // -- animação de cavando
-            // -- quando a animação terminar
-            //visual.SetActive(false)
-
-            // -- efeito de terra
-
-        }
-        else
-        {
-            //playerVisual.transform.DOMoveY(1f, 1);
-            playerVisual.SetActive(true);
-            holeTUT.SetActive(false);
-        }
+        Vector3 moverDir = new Vector3(0f, 0f, 0f);
     }
 
     public bool IsWalking()
