@@ -24,4 +24,14 @@ public class GameInput : MonoBehaviour
     {
         return _playerInputActions.Player.Jump.WasPressedThisFrame();
     }
+
+    public bool GetDash()
+    {
+        if(_playerInputActions.Player.Dash.IsPressed())
+        {
+            return true;
+        }
+        
+        return false;
+    }
 }
