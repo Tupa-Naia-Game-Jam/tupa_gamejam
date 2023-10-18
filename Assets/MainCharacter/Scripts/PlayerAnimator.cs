@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-    public PlayerAnimator main;
     [SerializeField] private Player player;
+    
     private Animator _animator;
-    private const string IS_WALKING = "isWalking";
+    
     private const string IS_DIGGING = "Digging";
+    private const string IS_WALKING = "isWalking";
     private const string IS_UNDER_GROUND = "isUnderGround";
     private const string IS_LEAVING_GROUND = "LeavingGround";
 
@@ -17,18 +18,15 @@ public class PlayerAnimator : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
-
-    private void Start()
-    {
-        main = this;
-    }
-
+    
     private void Update()
     {
         _animator.SetBool(IS_WALKING, player.IsWalking());
         
         if(player.IsDigging())
         {
+            player._canMove = false;
+            
             if (!_digging)
             {
                 _animator.SetTrigger(IS_DIGGING);
@@ -52,8 +50,7 @@ public class PlayerAnimator : MonoBehaviour
     public void LeavingGround()
     {
         _animator.SetBool(IS_UNDER_GROUND, false);
+        player.PlayerLeavingGround();
     }
-
-
 
 }

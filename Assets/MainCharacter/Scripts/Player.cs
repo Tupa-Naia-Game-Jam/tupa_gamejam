@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -29,38 +30,51 @@ public class Player : MonoBehaviour
     private bool _isDashing;
     private bool _isDigging;
 
+    private Vector3 _moverDir;
+    private Vector2 _inputVector;
+    private float _defaultMoveSpeed;
     private Coroutine _rechargeCoroutine;
 
+    public bool _canMove = true;
+    
     private void Start()
     {
         _stamina = maxStamina;
         holeTUT.SetActive(false);
         trailVFX.SetActive(false);
+        _defaultMoveSpeed = moveSpeed;
 
     }
     private void Update()
     {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        _inputVector = gameInput.GetMovementVectorNormalized();
+        _moverDir = new Vector3(_inputVector.x, 0f, _inputVector.y);
         
-        Vector3 moverDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        transform.position += moverDir * moveSpeed * Time.deltaTime;
+        CheckStatusAnimations();
+        PlayerWalking();
 
-        _isWalking = moverDir != Vector3.zero;
+        if (_isJumping ) IsJumping();
+        if (_isDashing && _stamina > 0) IsDashing(_moverDir);
+        if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
+    }
+
+    private void CheckStatusAnimations()
+    {
+        _isWalking = _moverDir != Vector3.zero;
         _isJumping = gameInput.GetJump();
         _isDashing = gameInput.GetDash();
         _isDigging = gameInput.GetDig();
-
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moverDir, Time.deltaTime * rotateSpeed);
-
-        if (_isJumping ) IsJumping();
-        if (_isDashing && _stamina > 0) IsDashing(moverDir);
-        if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
-
-        //PlayerDigging();
-
     }
 
+    private void PlayerWalking()
+    {
+        if(_canMove)
+        {
+            transform.position += _moverDir * moveSpeed * Time.deltaTime;
+            float rotateSpeed = 10f;
+            transform.forward = Vector3.Slerp(transform.forward, _moverDir, Time.deltaTime * rotateSpeed);
+        }
+    }
     
 
 
@@ -81,22 +95,29 @@ public class Player : MonoBehaviour
     private void IsDashing(Vector3 moverDir)
     {
         rb.velocity = moverDir * moveSpeed * 1.5f;
-        
-        //playerVisual.transform.localScale = new Vector3(1, 0.5f, 1);
-
         _stamina -= 10 * Time.deltaTime;
         if(_stamina < 0) _stamina = 0;
-
 
         if (_rechargeCoroutine != null) StopCoroutine(_rechargeCoroutine);
         _rechargeCoroutine = StartCoroutine(RechargerStamina());
     }
 
-   
-
     public void PlayerDigging()
     {
+        holeTUT.SetActive(true);
+
         Vector3 moverDir = new Vector3(0f, 0f, 0f);
+        moveSpeed = moveSpeed / 2;
+        _canMove = true;
+    }
+
+
+    public void PlayerLeavingGround()
+    {
+        holeTUT.SetActive(true);
+        moveSpeed = _defaultMoveSpeed;
+        _canMove = true;
+
     }
 
     public bool IsWalking()
