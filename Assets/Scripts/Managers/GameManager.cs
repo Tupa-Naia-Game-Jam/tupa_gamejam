@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour {
     public OnPause onPause;
     public OnResume onResume;
 
+    public delegate void OnFade();
+
+    public OnFade onFade;
+
     [SerializeField]
     private GameState _state = GameState.START;
 
@@ -48,6 +52,7 @@ public class GameManager : MonoBehaviour {
 
     public void Fade() {
         _state = GameState.IN_FADE;
+        onFade();
     }
     #endregion
 
