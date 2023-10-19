@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Rotate",
+                    "type": "Value",
+                    "id": "8c3ab7a5-c0c2-4d57-a630-3c93c36662c9",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -164,9 +173,31 @@
                 },
                 {
                     "name": "",
+                    "id": "006ad9e2-286a-4186-b0f3-c3e3ba156f5f",
+                    "path": "<XInputController>/leftStick",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "3eaa5b04-a514-41a3-82c6-8007506225e2",
                     "path": "<Keyboard>/space",
                     "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edc813da-fe1f-4bfa-8a14-8a44df22073a",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
@@ -214,6 +245,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "41469960-ee0b-41bc-ae54-4e339e134d09",
+                    "path": "<XInputController>/leftTrigger",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4587ddf1-d88d-4e83-a047-6fd39646ec0d",
+                    "path": "<XInputController>/rightStick",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "",
+                    "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
