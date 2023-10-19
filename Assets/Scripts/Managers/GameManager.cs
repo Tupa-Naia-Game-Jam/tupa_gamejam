@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour {
     public OnResume onResume;
 
     public delegate void OnFade();
+    public delegate void OnFadeInFinished();
 
     public OnFade onFade;
+    public OnFadeInFinished onFadeInFinished;
 
     [SerializeField]
     private GameState _state = GameState.START;

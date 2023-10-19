@@ -18,4 +18,8 @@ public class FadeUISystem : MonoBehaviour {
     public void FadeFinished() {
         GameManager.Instance.Resume();
     }
+
+    public void FadeInFinished() {
+        GameManager.Instance.onFadeInFinished();
+    }
 }
