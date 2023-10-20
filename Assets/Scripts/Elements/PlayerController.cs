@@ -21,8 +21,6 @@ public class PlayerController : MonoBehaviour {
         _playerInput.Player.Move.performed += ctx => OnMovement(ctx.ReadValue<Vector2>());
         _playerInput.Player.Move.canceled += ctx => OnMovementCancelled();
         _playerInput.Player.Jump.performed += ctx => Jump();
-        _playerInput.Player.Rotate.performed += ctx => OnLook(ctx.ReadValue<Vector2>());
-        _playerInput.Player.Rotate.canceled += ctx => OnLookCancelled();
     }
 
     void Start() {
@@ -31,8 +29,6 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         OnGround();
-        Vector3 rotation = new Vector3(0f, 0f, _rotation.x) * 1.5f;
-        transform.Rotate(rotation);
     }
 
     private void FixedUpdate() {
@@ -69,29 +65,30 @@ public class PlayerController : MonoBehaviour {
 
     private void OnMovement(Vector2 direction) {
         if (!CanMove()) return;
-        Debug.Log(direction);
 
-        if(_playerInput.Player.Dash.IsPressed()) {
-            _velocity = new Vector3(direction.x * _speedDash, _rigidbody.velocity.y, direction.y * _speedDash) ;
+        if (direction == Vector2.zero) return;
+
+        if (_playerInput.Player.Dash.IsPressed()) {
+            _velocity = new Vector3(direction.x * _speedDash, _rigidbody.velocity.y, direction.y * _speedDash);
         } else {
             _velocity = new Vector3(direction.x * _speed, _rigidbody.velocity.y, direction.y * _speed);
         }
+
+        /*if (direction == Vector2.zero) return;
+        Vector3 movementDirection = new Vector3(direction.x, 0f, direction.y);
+
+        if (_playerInput.Player.Dash.IsPressed()) {
+            transform.position += movementDirection * _speedDash * Time.deltaTime;
+        } else {
+            transform.position += movementDirection * _speed * Time.deltaTime;
+        }
+
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Slerp(transform.forward, movementDirection, Time.deltaTime * rotateSpeed);*/
     }
 
     private void OnMovementCancelled() {
         _velocity = new Vector3(0f, _rigidbody.velocity.y, 0f);
-    }
-    #endregion
-
-    #region Rotation
-    private Vector2 _rotation;
-
-    private void OnLook(Vector2 value) {
-        _rotation = value;
-    }
-
-    private void OnLookCancelled() {
-        _rotation = Vector3.zero;
     }
     #endregion
 
