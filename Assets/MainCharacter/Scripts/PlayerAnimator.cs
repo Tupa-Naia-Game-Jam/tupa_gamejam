@@ -13,7 +13,7 @@ public class PlayerAnimator : MonoBehaviour
     private const string IS_UNDER_GROUND = "isUnderGround";
     private const string IS_LEAVING_GROUND = "LeavingGround";
 
-    private bool _digging = false;
+    [SerializeField]private bool _digging = false;
     private void Awake()
     {
         //_animator = GetComponent<Animator>();
@@ -29,11 +29,14 @@ public class PlayerAnimator : MonoBehaviour
             
             if (!_digging)
             {
+                Debug.Log("Cavando");
                 _animator.SetTrigger(IS_DIGGING);
                 _digging = !_digging;
             }
             else if(_digging)
             {
+                Debug.Log("Saindo");
+
                 _animator.SetTrigger(IS_LEAVING_GROUND);
                 _digging = !_digging;
             }
@@ -50,7 +53,7 @@ public class PlayerAnimator : MonoBehaviour
     public void LeavingGround()
     {
         _animator.SetBool(IS_UNDER_GROUND, false);
-       // player.PlayerLeavingGround();
+       //player.PlayerLeavingGround();
     }
 
 }

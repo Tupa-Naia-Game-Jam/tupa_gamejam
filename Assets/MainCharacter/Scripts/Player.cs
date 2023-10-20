@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     private Vector2 _inputVector;
     private float _defaultMoveSpeed;
     private Coroutine _rechargeCoroutine;
+    private bool aux = false;
 
     public bool _canMove = true;
     
@@ -82,11 +83,25 @@ public class Player : MonoBehaviour
 
     private void Digging()
     {
-        if (_isDigging)
+        if (_isDigging )
         {
-            _canMove = false;
-            holeTUT.SetActive(true);
-            holeTUT.transform.DOScale(.7f, 2f).OnComplete(()=> UnderGround());
+            if (!aux)
+            {
+                _canMove = false;
+                holeTUT.SetActive(true);
+                holeTUT.transform.DOScale(.7f, 2f).OnComplete(() => UnderGround());
+                aux = !aux;
+            }
+            else
+            {
+                _canMove = false;
+                trailVFX.SetActive(false);
+                playerVisual.SetActive(true);
+                holeTUT.SetActive(true);
+                holeTUT.transform.DOScale(.7f, .5f).OnComplete(() => LeavingGround());
+                aux = !aux;
+            }
+
         }
     }
 
@@ -94,13 +109,46 @@ public class Player : MonoBehaviour
     {
         playerVisual.SetActive(false);
         holeTUT.transform.DOScale(0f, 2f).OnComplete(() => EaseIn());
+        playerVisual.transform.DOMove(new Vector3(transform.position.x, 0, transform.position.z), 1);
     }
+
+    private void LeavingGround()
+    {
+        trailVFX.SetActive(false);
+        holeTUT.transform.DOScale(0f, .5f).OnComplete(() => EaseOut());
+    }
+
+
     private void EaseIn()
     {
         holeTUT.SetActive(false);
         trailVFX.SetActive(true);
         _canMove = true;
     }
+
+    private void EaseOut()
+    {
+        holeTUT.SetActive(false);
+        _canMove = true;
+    }
+
+
+    public void PlayerLeavingGround()
+    {
+        //holeTUT.SetActive(true);
+        
+        
+        
+        playerVisual.SetActive(true);
+        _canMove = true;
+
+
+        //moveSpeed = _defaultMoveSpeed;
+        //
+
+    }
+   
+
 
 
     public void IsJumping()
@@ -137,13 +185,7 @@ public class Player : MonoBehaviour
 
     
 
-    public void PlayerLeavingGround()
-    {
-        holeTUT.SetActive(true);
-        moveSpeed = _defaultMoveSpeed;
-        _canMove = true;
-
-    }
+    
 
     public bool IsWalking()
     {

@@ -208,6 +208,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Tatu
       objectReference: {fileID: 0}
+    - target: {fileID: 1564387295787138284, guid: f850fbe646f9e01438708c31b794928f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2954107066261996782, guid: f850fbe646f9e01438708c31b794928f,
         type: 3}
       propertyPath: m_LocalPosition.x
