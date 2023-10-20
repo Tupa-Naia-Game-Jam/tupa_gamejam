@@ -288,6 +288,21 @@ PrefabInstance:
       propertyPath: gameInput
       value: 
       objectReference: {fileID: 1513813471}
+    - target: {fileID: 8057810906949400731, guid: f850fbe646f9e01438708c31b794928f,
+        type: 3}
+      propertyPath: playerVisual
+      value: 
+      objectReference: {fileID: 1449362449}
+    - target: {fileID: 8747740010419027200, guid: f850fbe646f9e01438708c31b794928f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142393453894601768, guid: f850fbe646f9e01438708c31b794928f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3128202721781530073, guid: f850fbe646f9e01438708c31b794928f, type: 3}
     m_RemovedGameObjects: []
@@ -636,6 +651,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1449362449 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6062511396359688194, guid: f850fbe646f9e01438708c31b794928f,
+    type: 3}
+  m_PrefabInstance: {fileID: 258271689}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1513813470
 GameObject:
   m_ObjectHideFlags: 0
