@@ -115,7 +115,7 @@ public class Player : MonoBehaviour
             {
                 _canMove = false;
                 StartCoroutine(WaitTime(1.2f, false, true));
-               
+                playerVisual.transform.DOMove(new Vector3(transform.position.x, 0, transform.position.z), 1);
             }
             else
             {
@@ -229,5 +229,12 @@ public class Player : MonoBehaviour
         playerVisual.SetActive(playerStatusAnim);
         aux2 = !aux2;
     }
+
+
+
+
+
+
+
 
 }
