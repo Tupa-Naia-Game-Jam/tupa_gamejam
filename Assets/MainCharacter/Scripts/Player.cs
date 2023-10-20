@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float chargeRate;
     [SerializeField] private GameObject playerVisual;
     [SerializeField] private GameObject trailVFX;
+    [SerializeField] private GameObject playerBall;
 
     [Space(5)]
     [SerializeField] private GameInput gameInput;
@@ -34,6 +35,8 @@ public class Player : MonoBehaviour
     private Vector2 _inputVector;
     private float _defaultMoveSpeed;
     private Coroutine _rechargeCoroutine;
+    private bool aux = false;
+    private bool aux2 = false;
 
     public bool _canMove = true;
     
@@ -42,6 +45,7 @@ public class Player : MonoBehaviour
         _stamina = maxStamina;
         holeTUT.SetActive(false);
         trailVFX.SetActive(false);
+        playerBall.SetActive(false);
         _defaultMoveSpeed = moveSpeed;
 
     }
@@ -53,9 +57,10 @@ public class Player : MonoBehaviour
         CheckStatusAnimations();
         PlayerWalking();
 
+        Digging();
+        PlayerDash();
+
         if (_isJumping ) IsJumping();
-        if (_isDashing && _stamina > 0) IsDashing(_moverDir);
-        if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
     }
 
     private void CheckStatusAnimations()
@@ -66,6 +71,8 @@ public class Player : MonoBehaviour
         _isDigging = gameInput.GetDig();
     }
 
+    
+
     private void PlayerWalking()
     {
         if(_canMove)
@@ -75,7 +82,97 @@ public class Player : MonoBehaviour
             transform.forward = Vector3.Slerp(transform.forward, _moverDir, Time.deltaTime * rotateSpeed);
         }
     }
-    
+
+    private void Digging()
+    {
+        if (_isDigging )
+        {
+            if (!aux)
+            {
+                _canMove = false;
+                holeTUT.SetActive(true);
+                holeTUT.transform.DOScale(.7f, 2f).OnComplete(() => UnderGround());
+                aux = !aux;
+            }
+            else
+            {
+                _canMove = false;
+                trailVFX.SetActive(false);
+                playerVisual.SetActive(true);
+                holeTUT.SetActive(true);
+                holeTUT.transform.DOScale(.7f, .5f).OnComplete(() => LeavingGround());
+                aux = !aux;
+            }
+
+        }
+    }
+
+    private void PlayerDash()
+    {
+        if (_isDashing)
+        {
+            if (!aux2)
+            {
+                _canMove = false;
+                StartCoroutine(WaitTime(1.2f, false, true));
+                playerVisual.transform.DOMove(new Vector3(transform.position.x, 0, transform.position.z), 1);
+            }
+            else
+            {
+                _canMove = false;
+                StartCoroutine(WaitTime(1.2f, true, false));
+            }
+
+        }
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void UnderGround()
+    {
+        playerVisual.SetActive(false);
+        holeTUT.transform.DOScale(0f, 2f).OnComplete(() => EaseIn());
+        playerVisual.transform.DOMove(new Vector3(transform.position.x, 0, transform.position.z), 1);
+    }
+
+    private void LeavingGround()
+    {
+        trailVFX.SetActive(false);
+        holeTUT.transform.DOScale(0f, .5f).OnComplete(() => EaseOut());
+    }
+
+
+    private void EaseIn()
+    {
+        holeTUT.SetActive(false);
+        trailVFX.SetActive(true);
+        _canMove = true;
+    }
+
+    private void EaseOut()
+    {
+        holeTUT.SetActive(false);
+        _canMove = true;
+    }
+
+    public void PlayerLeavingGround()
+    {
+        playerVisual.SetActive(true);
+        _canMove = true;
+    }
+   
 
 
 
@@ -92,33 +189,7 @@ public class Player : MonoBehaviour
         rb.AddForce(Vector2.up * jumpforce, ForceMode.Impulse);
     }
 
-    private void IsDashing(Vector3 moverDir)
-    {
-        rb.velocity = moverDir * moveSpeed * 1.5f;
-        _stamina -= 10 * Time.deltaTime;
-        if(_stamina < 0) _stamina = 0;
-
-        if (_rechargeCoroutine != null) StopCoroutine(_rechargeCoroutine);
-        _rechargeCoroutine = StartCoroutine(RechargerStamina());
-    }
-
-    public void PlayerDigging()
-    {
-        holeTUT.SetActive(true);
-
-        Vector3 moverDir = new Vector3(0f, 0f, 0f);
-        moveSpeed = moveSpeed / 2;
-        _canMove = true;
-    }
-
-
-    public void PlayerLeavingGround()
-    {
-        holeTUT.SetActive(true);
-        moveSpeed = _defaultMoveSpeed;
-        _canMove = true;
-
-    }
+    
 
     public bool IsWalking()
     {
@@ -129,6 +200,11 @@ public class Player : MonoBehaviour
     public bool IsDigging()
     {
         return _isDigging;
+    }
+
+    public bool IsDash()
+    {
+        return _isDashing;
     }
 
     private IEnumerator RechargerStamina()
@@ -142,5 +218,23 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
     }
+
+
+
+    IEnumerator WaitTime(float wait, bool playerStatusAnim, bool ballSatusAnim)
+    {
+        yield return new WaitForSeconds(wait);
+        _canMove = true;
+        playerBall.SetActive(ballSatusAnim);
+        playerVisual.SetActive(playerStatusAnim);
+        aux2 = !aux2;
+    }
+
+
+
+
+
+
+
 
 }

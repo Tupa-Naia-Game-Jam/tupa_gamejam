@@ -66,7 +66,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
-                    ""id"": ""b06ba6cf-b61b-456b-a5f6-af236fc0223f"",
+                    ""id"": ""30a8ee29-f49f-4c1d-831f-4a8fae3e3d2f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -261,8 +261,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9e6f0aba-fe36-4c99-b43d-38bf8d5ca94d"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""id"": ""c92c9d20-38d7-4ba4-ad87-70944e54ce03"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
