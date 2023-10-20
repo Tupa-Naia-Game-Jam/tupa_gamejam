@@ -53,6 +53,8 @@ public class Player : MonoBehaviour
         CheckStatusAnimations();
         PlayerWalking();
 
+        Digging();
+
         if (_isJumping ) IsJumping();
         if (_isDashing && _stamina > 0) IsDashing(_moverDir);
         if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
@@ -66,6 +68,8 @@ public class Player : MonoBehaviour
         _isDigging = gameInput.GetDig();
     }
 
+    
+
     private void PlayerWalking()
     {
         if(_canMove)
@@ -75,8 +79,28 @@ public class Player : MonoBehaviour
             transform.forward = Vector3.Slerp(transform.forward, _moverDir, Time.deltaTime * rotateSpeed);
         }
     }
-    
 
+    private void Digging()
+    {
+        if (_isDigging)
+        {
+            _canMove = false;
+            holeTUT.SetActive(true);
+            holeTUT.transform.DOScale(.7f, 2f).OnComplete(()=> UnderGround());
+        }
+    }
+
+    private void UnderGround()
+    {
+        playerVisual.SetActive(false);
+        holeTUT.transform.DOScale(0f, 2f).OnComplete(() => EaseIn());
+    }
+    private void EaseIn()
+    {
+        holeTUT.SetActive(false);
+        trailVFX.SetActive(true);
+        _canMove = true;
+    }
 
 
     public void IsJumping()
@@ -111,6 +135,7 @@ public class Player : MonoBehaviour
         _canMove = true;
     }
 
+    
 
     public void PlayerLeavingGround()
     {

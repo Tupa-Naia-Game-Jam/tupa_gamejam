@@ -6,7 +6,7 @@ public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private Player player;
     
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     
     private const string IS_DIGGING = "Digging";
     private const string IS_WALKING = "isWalking";
@@ -16,7 +16,7 @@ public class PlayerAnimator : MonoBehaviour
     private bool _digging = false;
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
     }
     
     private void Update()
@@ -25,7 +25,7 @@ public class PlayerAnimator : MonoBehaviour
         
         if(player.IsDigging())
         {
-            player._canMove = false;
+            //player._canMove = false;
             
             if (!_digging)
             {
@@ -43,14 +43,14 @@ public class PlayerAnimator : MonoBehaviour
     public  void Digging()
     {
         _animator.SetBool(IS_UNDER_GROUND, true);
-        player.PlayerDigging();
+        //player.PlayerDigging();
     }
 
 
     public void LeavingGround()
     {
         _animator.SetBool(IS_UNDER_GROUND, false);
-        player.PlayerLeavingGround();
+       // player.PlayerLeavingGround();
     }
 
 }
