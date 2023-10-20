@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float chargeRate;
     [SerializeField] private GameObject playerVisual;
     [SerializeField] private GameObject trailVFX;
+    [SerializeField] private GameObject playerBall;
 
     [Space(5)]
     [SerializeField] private GameInput gameInput;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
     private float _defaultMoveSpeed;
     private Coroutine _rechargeCoroutine;
     private bool aux = false;
+    private bool aux2 = false;
 
     public bool _canMove = true;
     
@@ -43,6 +45,7 @@ public class Player : MonoBehaviour
         _stamina = maxStamina;
         holeTUT.SetActive(false);
         trailVFX.SetActive(false);
+        playerBall.SetActive(false);
         _defaultMoveSpeed = moveSpeed;
 
     }
@@ -55,10 +58,9 @@ public class Player : MonoBehaviour
         PlayerWalking();
 
         Digging();
+        PlayerDash();
 
         if (_isJumping ) IsJumping();
-        if (_isDashing && _stamina > 0) IsDashing(_moverDir);
-        if(!_isDashing) playerVisual.transform.localScale = new Vector3(1, 1, 1);
     }
 
     private void CheckStatusAnimations()
@@ -105,6 +107,39 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void PlayerDash()
+    {
+        if (_isDashing)
+        {
+            if (!aux2)
+            {
+                _canMove = false;
+                StartCoroutine(WaitTime(1.2f, false, true));
+               
+            }
+            else
+            {
+                _canMove = false;
+                StartCoroutine(WaitTime(1.2f, true, false));
+            }
+
+        }
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void UnderGround()
     {
         playerVisual.SetActive(false);
@@ -132,20 +167,10 @@ public class Player : MonoBehaviour
         _canMove = true;
     }
 
-
     public void PlayerLeavingGround()
     {
-        //holeTUT.SetActive(true);
-        
-        
-        
         playerVisual.SetActive(true);
         _canMove = true;
-
-
-        //moveSpeed = _defaultMoveSpeed;
-        //
-
     }
    
 
@@ -164,27 +189,6 @@ public class Player : MonoBehaviour
         rb.AddForce(Vector2.up * jumpforce, ForceMode.Impulse);
     }
 
-    private void IsDashing(Vector3 moverDir)
-    {
-        rb.velocity = moverDir * moveSpeed * 1.5f;
-        _stamina -= 10 * Time.deltaTime;
-        if(_stamina < 0) _stamina = 0;
-
-        if (_rechargeCoroutine != null) StopCoroutine(_rechargeCoroutine);
-        _rechargeCoroutine = StartCoroutine(RechargerStamina());
-    }
-
-    public void PlayerDigging()
-    {
-        holeTUT.SetActive(true);
-
-        Vector3 moverDir = new Vector3(0f, 0f, 0f);
-        moveSpeed = moveSpeed / 2;
-        _canMove = true;
-    }
-
-    
-
     
 
     public bool IsWalking()
@@ -198,6 +202,11 @@ public class Player : MonoBehaviour
         return _isDigging;
     }
 
+    public bool IsDash()
+    {
+        return _isDashing;
+    }
+
     private IEnumerator RechargerStamina()
     {
         yield return new WaitForSeconds(1f);
@@ -208,6 +217,17 @@ public class Player : MonoBehaviour
             if (_stamina < maxStamina) _stamina = maxStamina;
             yield return new WaitForSeconds(.1f);
         }
+    }
+
+
+
+    IEnumerator WaitTime(float wait, bool playerStatusAnim, bool ballSatusAnim)
+    {
+        yield return new WaitForSeconds(wait);
+        _canMove = true;
+        playerBall.SetActive(ballSatusAnim);
+        playerVisual.SetActive(playerStatusAnim);
+        aux2 = !aux2;
     }
 
 }

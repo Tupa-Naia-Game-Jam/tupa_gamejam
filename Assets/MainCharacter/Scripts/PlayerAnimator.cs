@@ -10,10 +10,16 @@ public class PlayerAnimator : MonoBehaviour
     
     private const string IS_DIGGING = "Digging";
     private const string IS_WALKING = "isWalking";
-    private const string IS_UNDER_GROUND = "isUnderGround";
     private const string IS_LEAVING_GROUND = "LeavingGround";
 
+    private const string IS_DASH_IN = "DashIN";
+    private const string IS_DASH_OUT = "Dashout";
+
+
+
+
     [SerializeField]private bool _digging = false;
+    [SerializeField]private bool _dash = false;
     private void Awake()
     {
         //_animator = GetComponent<Animator>();
@@ -25,35 +31,34 @@ public class PlayerAnimator : MonoBehaviour
         
         if(player.IsDigging())
         {
-            //player._canMove = false;
-            
             if (!_digging)
             {
-                Debug.Log("Cavando");
                 _animator.SetTrigger(IS_DIGGING);
                 _digging = !_digging;
             }
             else if(_digging)
             {
-                Debug.Log("Saindo");
-
                 _animator.SetTrigger(IS_LEAVING_GROUND);
                 _digging = !_digging;
             }
         }
+         
+
+        if (player.IsDash())
+        {
+
+            if (!_dash)
+            {
+                _animator.SetTrigger(IS_DASH_IN);
+                _dash = !_dash;
+            }
+            else if (_dash)
+            {
+                _animator.SetTrigger(IS_DASH_OUT);
+                _dash = !_dash;
+            }
+        }
     }
 
-    public  void Digging()
-    {
-        _animator.SetBool(IS_UNDER_GROUND, true);
-        //player.PlayerDigging();
-    }
-
-
-    public void LeavingGround()
-    {
-        _animator.SetBool(IS_UNDER_GROUND, false);
-       //player.PlayerLeavingGround();
-    }
 
 }
