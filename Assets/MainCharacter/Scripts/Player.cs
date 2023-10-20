@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 public class Player : MonoBehaviour
@@ -61,6 +62,8 @@ public class Player : MonoBehaviour
         PlayerDash();
 
         if (_isJumping ) IsJumping();
+        playerVisual.transform.DOMove(new Vector3(transform.position.x, transform.position.y, transform.position.z), 1);
+
     }
 
     private void CheckStatusAnimations()
@@ -151,6 +154,7 @@ public class Player : MonoBehaviour
     {
         trailVFX.SetActive(false);
         holeTUT.transform.DOScale(0f, .5f).OnComplete(() => EaseOut());
+
     }
 
 
