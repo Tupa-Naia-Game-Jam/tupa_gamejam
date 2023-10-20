@@ -984,7 +984,7 @@ MonoBehaviour:
   - {fileID: 689879950}
   - {fileID: 79648478}
   - {fileID: 980295649}
-  _fadeDuration: 2
+  _fadeDuration: 4
 --- !u!1 &1377638236
 GameObject:
   m_ObjectHideFlags: 0
